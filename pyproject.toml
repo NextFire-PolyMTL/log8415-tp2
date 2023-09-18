@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "log8415-tp1"
+version = "0.1.0"
+description = ""
+authors = [
+    "NextFire <git@yuru.moe>",
+    "quentinguidee <contact@quentinguidee.dev>",
+    "aurpur <ikamaaurel@gmail.com>",
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+
+[tool.poetry.group.app.dependencies]
+flask = "^2.3.3"
+gunicorn = "^21.2.0"
+
+[tool.poetry.group.deploy.dependencies]
+boto3 = "^1.28.50"
+paramiko = "^3.3.1"
+backoff = "^2.2.1"
+requests = "^2.31.0"
+
+[tool.poetry.group.bench.dependencies]
+boto3 = "^1.28.50"
+requests = "^2.31.0"
+orjson = "^3.9.7"
+numpy = "^1.26.0"
+matplotlib = "^3.8.0"
+
+[tool.poetry.group.dev.dependencies]
+boto3-stubs = {extras = ["cloudwatch", "elbv2", "essential"], version = "^1.28.50"}
+autopep8 = "^2.0.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
