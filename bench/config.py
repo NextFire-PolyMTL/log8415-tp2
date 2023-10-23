@@ -1,6 +1,6 @@
 LOG_LEVEL = 'INFO'
 
-LB_NAME = 'Lab1'
+LB_NAME = 'Lab2'
 CLUSTER_1_PATH = '/cluster1'
 CLUSTER_1_TARGET_NAME = f"{LB_NAME}-1"
 CLUSTER_2_PATH = '/cluster2'
