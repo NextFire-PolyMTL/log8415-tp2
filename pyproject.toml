@@ -22,15 +22,8 @@ paramiko = "^3.3.1"
 backoff = "^2.2.1"
 requests = "^2.31.0"
 
-[tool.poetry.group.bench.dependencies]
-boto3 = "^1.28.50"
-requests = "^2.31.0"
-orjson = "^3.9.7"
-numpy = "^1.26.0"
-matplotlib = "^3.8.0"
-
 [tool.poetry.group.dev.dependencies]
-boto3-stubs = {extras = ["cloudwatch", "elbv2", "essential"], version = "^1.28.50"}
+boto3-stubs = {extras = ["essential"], version = "^1.28.50"}
 autopep8 = "^2.0.4"
 
 [build-system]

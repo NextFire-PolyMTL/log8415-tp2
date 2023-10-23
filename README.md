@@ -34,17 +34,3 @@ To terminate all resources:
 ```sh
 poetry run python3 -m deploy.cleanup
 ```
-
-## Benchmarking
-
-```sh
-poetry install --only bench
-poetry run python3 -m bench
-```
-
-Or with Docker:
-
-```sh
-docker build -t bench -f .docker/bench.Dockerfile .
-docker run --rm -it -v $HOME/.aws:/root/.aws:ro  -v $PWD/results:/src/results bench
-```
