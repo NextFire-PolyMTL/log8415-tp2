@@ -12,15 +12,18 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.11"
 
-[tool.poetry.group.app.dependencies]
-flask = "^2.3.3"
-gunicorn = "^21.2.0"
-
 [tool.poetry.group.deploy.dependencies]
 boto3 = "^1.28.50"
 paramiko = "^3.3.1"
 backoff = "^2.2.1"
-requests = "^2.31.0"
+
+[tool.poetry.group.orchestrator.dependencies]
+flask = "^2.3.3"
+gunicorn = "^21.2.0"
+
+[tool.poetry.group.worker.dependencies]
+flask = "^2.3.3"
+gunicorn = "^21.2.0"
 
 [tool.poetry.group.dev.dependencies]
 boto3-stubs = {extras = ["essential"], version = "^1.28.50"}

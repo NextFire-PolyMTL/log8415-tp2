@@ -1,0 +1,20 @@
+services:
+  worker-1:
+    image: worker
+    build:
+      context: ..
+      dockerfile: .docker/worker.Dockerfile
+    environment:
+      - INSTANCE_ID=${INSTANCE_ID:-unknown}
+    ports:
+      - "8000:8000"
+
+  worker-2:
+    image: worker
+    build:
+      context: ..
+      dockerfile: .docker/worker.Dockerfile
+    environment:
+      - INSTANCE_ID=${INSTANCE_ID:-unknown}
+    ports:
+      - "8001:8000"

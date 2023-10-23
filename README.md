@@ -8,20 +8,6 @@ To setup the venv and install all dependencies:
 poetry install
 ```
 
-## Web application
-
-```sh
-poetry install --only app
-poetry run gunicorn app:app
-```
-
-Or with Docker:
-
-```sh
-docker build -t app -f .docker/app.Dockerfile .
-docker run --rm -it -p 8000:8000 app
-```
-
 ## Deployment
 
 ```sh

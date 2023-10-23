@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from itertools import chain
 from typing import TYPE_CHECKING
 
 from deploy.config import (
@@ -10,7 +9,6 @@ from deploy.config import (
     DEV,
     IMAGE_ID,
     M4_L_NB,
-    T2_L_NB,
 )
 from deploy.utils import ec2_cli, ec2_res, get_default_vpc, wait_instance
 
@@ -24,11 +22,11 @@ async def setup_infra():
     vpc = get_default_vpc()
     kp = _setup_key_pair()
     sg = _setup_security_group(vpc)
-    instances_m4, instances_t2 = _launch_instances(sg, kp)
+    instances_m4 = _launch_instances(sg, kp)
     async with asyncio.TaskGroup() as tg:
-        for inst in chain(instances_m4, instances_t2):
+        for inst in instances_m4:
             tg.create_task(asyncio.to_thread(wait_instance, inst))
-    return instances_m4, instances_t2
+    return instances_m4
 
 
 def _setup_key_pair():
@@ -76,7 +74,7 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
                    if 'ZoneName' in zone]
 
     instances_m4 = []
-    for i in range(M4_L_NB if not DEV else 1):
+    for i in range(M4_L_NB if not DEV else 2):
         zone = avail_zones[i % len(avail_zones)]
         instances = ec2_res.create_instances(
             KeyName=kp.key_name,
@@ -95,24 +93,4 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
         )
         instances_m4 += instances
 
-    instances_t2 = []
-    for i in range(T2_L_NB if not DEV else 1):
-        zone = avail_zones[-1 - i % len(avail_zones)]  # reverse order
-        instances = ec2_res.create_instances(
-            KeyName=kp.key_name,
-            SecurityGroupIds=[sg.id],
-            InstanceType='t2.large',
-            ImageId=IMAGE_ID,
-            MaxCount=1,
-            MinCount=1,
-            Placement={'AvailabilityZone': zone},
-            TagSpecifications=[{
-                'ResourceType': 'instance',
-                'Tags': [
-                    {'Key': 'Name', 'Value': AWS_RES_NAME},
-                ]
-            }]
-        )
-        instances_t2 += instances
-
-    return instances_m4, instances_t2
+    return instances_m4

@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from deploy.bootstrap import bootstrap_instance
+from deploy.bootstrap import bootstrap_instance, launch_orchestrator, launch_worker
 from deploy.config import LOG_LEVEL
 from deploy.infra import setup_infra
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 async def main():
     logger.info('Setting up infrastructure')
-    instances_m4, instances_t2 = await setup_infra()
+    instances_m4 = await setup_infra()
 
     # Use this to use existing instance instead of creating new ones
     # instances = ec2_res.instances.filter(
@@ -20,14 +20,14 @@ async def main():
     #     ]
     # )
 
-    logger.info('Bootstrapping instances')
+    logger.info('Bootstrapping workers')
     async with asyncio.TaskGroup() as tg:
-        for inst in instances_m4:
+        for inst in instances_m4[:-1]:
             tg.create_task(
-                asyncio.to_thread(bootstrap_instance, inst, '/cluster1'))
-        for inst in instances_t2:
-            tg.create_task(
-                asyncio.to_thread(bootstrap_instance, inst, '/cluster2'))
+                asyncio.to_thread(bootstrap_instance, launch_worker, inst))
+
+    logger.info('Bootstrapping orchestrator')
+    bootstrap_instance(launch_orchestrator, instances_m4[-1])
 
 
 if __name__ == '__main__':
