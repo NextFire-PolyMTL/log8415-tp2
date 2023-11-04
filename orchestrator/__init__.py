@@ -1,8 +1,8 @@
 import logging
 import os
 import threading
-
 import requests
+
 from flask import Flask, jsonify, request
 
 from deploy.config import LOG_LEVEL
