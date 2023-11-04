@@ -1,13 +1,18 @@
-import json
+import logging
 import os
 import threading
 
+import requests
 from flask import Flask, jsonify, request
+
+from deploy.config import LOG_LEVEL
+from orchestrator.containers import reserve_free_container, free_container, Container
 
 INSTANCE_ID = os.environ.get("INSTANCE_ID", "unknown")
 
+logger = logging.getLogger(__name__)
 app = Flask(__name__)
-lock = threading.Lock()
+request_queue_lock = threading.Lock()
 request_queue = []
 
 
@@ -21,47 +26,49 @@ def health():
     return "OK"
 
 
-def send_request_to_container(container_id, container_info, incoming_request_data):
-    print(
-        f"Sending request to container {container_id} with data {incoming_request_data}")
-    # Code here
-    print(f"Received response from container {container_id}")
-
-
-def update_container_status(container_id, status):
-    with lock:
-        with open("test.json", "r") as f:
-            data = json.load(f)
-        data[container_id]["status"] = status
-        with open("test.json", "w") as f:
-            json.dump(data, f)
-
-
-def process_request(incoming_request_data):
-    with lock:
-        with open("test.json", "r") as f:
-            data = json.load(f)
-    free_container = None
-    for container_id, container_info in data.items():
-        if container_info["status"] == "free":
-            free_container = container_id
-            break
-    if free_container:
-        update_container_status(free_container, "busy")
-        send_request_to_container(
-            free_container, data[free_container], incoming_request_data)
-        update_container_status(free_container, "free")
-    else:
-        request_queue.append(incoming_request_data)
-
-
 @app.route("/new_request", methods=["POST"])
 def new_request():
     incoming_request_data = request.data
-    threading.Thread(target=process_request, args=(
-        incoming_request_data,)).start()
+    threading.Thread(
+        target=process_request,
+        args=(incoming_request_data,)
+    ).start()
     return jsonify({"message": "Request received and processing started."})
 
 
+def send_request_to_container(container_uuid: str, container: Container, incoming_request_data: bytes):
+    logger.info(f"Sending request to container {container_uuid} with data {incoming_request_data}")
+    container_ip = container["ip"]
+    container_port = container["port"]
+    requests.request(
+        method="POST",
+        url=f"http://{container_ip}:{container_port}",
+        data=incoming_request_data,
+    )
+    logger.info(f"Received response from container {container_uuid}")
+
+
+def process_request(incoming_request_data: bytes):
+    reserved = reserve_free_container()
+    if reserved:
+        container_uuid, container = reserved
+        send_request_to_container(container_uuid, container, incoming_request_data)
+        logger.info(f"Request processed by container {container_uuid}")
+        free_container(container_uuid)
+        logger.info(f"Container {container_uuid} freed")
+        with request_queue_lock:
+            if len(request_queue) != 0:
+                next_request = request_queue.pop(0)
+                threading.Thread(
+                    target=process_request,
+                    args=(next_request,)
+                ).start()
+    else:
+        with request_queue_lock:
+            request_queue.append(incoming_request_data)
+            logger.info(f"Request queued. Queue length: {len(request_queue)}")
+
+
 if __name__ == "__main__":
+    logging.basicConfig(level=LOG_LEVEL)
     app.run(port=80)
