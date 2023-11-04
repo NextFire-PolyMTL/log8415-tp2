@@ -51,12 +51,14 @@ def launch_worker(instance: 'Instance', ssh_client: SSHClient):
             f.seek(0)
             sftp.putfo(f, 'src.tar.gz')
     logger.info('Build and start worker')
+    # The DOCKER_BUILDKIT=0 is a workaround for a bug currently seen in docker-compose
+    # https://stackoverflow.com/questions/77225539/docker-compose-error-internal-booting-buildkit-http-invalid-host-header
     ssh_exec(
         ssh_client, rf"""
             rm -rf src && mkdir -p src
             tar xzf src.tar.gz -C src/
             cd src/
-            sudo INSTANCE_ID={instance.id} docker compose -f .docker/worker.docker-compose.yml up --build -d
+            sudo DOCKER_BUILDKIT=0 INSTANCE_ID={instance.id} docker compose -f .docker/worker.docker-compose.yml up --build -d
             """)
 
 
