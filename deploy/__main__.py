@@ -18,7 +18,7 @@ async def main():
     #         {'Name': 'tag:Name', 'Values': [AWS_RES_NAME]},
     #         {'Name': 'instance-state-name', 'Values': ['pending', 'running']},
     #     ]
-    # )
+    # ) 
 
     logger.info('Bootstrapping workers')
     async with asyncio.TaskGroup() as tg:
@@ -26,8 +26,8 @@ async def main():
             tg.create_task(
                 asyncio.to_thread(bootstrap_instance, launch_worker, inst))
 
-    logger.info('Bootstrapping orchestrator')
-    bootstrap_instance(launch_orchestrator, instances_m4[-1])
+        logger.info('Bootstrapping orchestrator')
+        bootstrap_instance(launch_orchestrator, instances_m4[-1])
 
 
 if __name__ == '__main__':

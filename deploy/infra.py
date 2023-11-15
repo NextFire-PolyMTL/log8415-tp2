@@ -87,10 +87,15 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
             TagSpecifications=[{
                 'ResourceType': 'instance',
                 'Tags': [
-                    {'Key': 'Name', 'Value': AWS_RES_NAME},
+                    {'Key': 'Name', 'Value': AWS_RES_NAME + getInstanceName(i)},
                 ]
             }]
         )
         instances_m4 += instances
 
     return instances_m4
+
+def getInstanceName(i):
+    if i == M4_L_NB - 1:
+        return "_orchestrator"
+    return "_worker_" + str(i)

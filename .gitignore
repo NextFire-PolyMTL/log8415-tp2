@@ -2,3 +2,9 @@
 __pycache__/
 *.pem
 containers.json
+report/report.aux
+report/report.fdb_latexmk
+report/report.fls
+report/report.log
+report/report.out
+report/report.toc
