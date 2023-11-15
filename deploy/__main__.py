@@ -4,6 +4,7 @@ import logging
 from deploy.bootstrap import bootstrap_instance, launch_orchestrator, launch_worker
 from deploy.config import LOG_LEVEL
 from deploy.infra import setup_infra
+from 
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,9 @@ async def main():
 
         logger.info('Bootstrapping orchestrator')
         bootstrap_instance(launch_orchestrator, instances_m4[-1])
+
+        logger.info('Registering workers')
+        register_new_container(ip: str, port: str) 
 
 
 if __name__ == '__main__':

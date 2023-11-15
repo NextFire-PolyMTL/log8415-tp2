@@ -22,7 +22,7 @@ def giveup(e: Exception):
 def terminate_ec2():
     instances = ec2_res.instances.filter(
         Filters=[
-            {'Name': 'tag:Name', 'Values': [AWS_RES_NAME]},
+            {'Name': 'tag:Name', 'Values': ['*'+AWS_RES_NAME+'*']},
             {'Name': 'instance-state-name', 'Values': ['pending', 'running']},
         ]
     )
