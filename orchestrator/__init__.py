@@ -5,7 +5,7 @@ import requests
 
 from flask import Flask, jsonify, request
 
-from deploy.config import LOG_LEVEL
+
 from orchestrator.containers import reserve_free_container, free_container, Container
 
 INSTANCE_ID = os.environ.get("INSTANCE_ID", "unknown")
@@ -70,5 +70,6 @@ def process_request(incoming_request_data: bytes):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=LOG_LEVEL)
-    app.run(port=80)
+    logging.basicConfig(level='INFO')
+    logger.info(f"Starting orchestrator {INSTANCE_ID} on port 8000")
+    app.run(port=8000)
