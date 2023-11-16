@@ -1,8 +1,7 @@
 import json
 import threading
 import uuid
-
-from typing import TypedDict, Optional
+from typing import TypedDict
 
 CONTAINERS_FILENAME = "containers.json"
 STATUS_FREE = "free"
@@ -32,7 +31,7 @@ def _read_containers_from_file() -> dict[str, Container]:
 
 def register_new_container(ip: str, port: str) -> None:
     container_uuid = str(uuid.uuid4())
-    container = {
+    container: Container = {
         "ip": ip,
         "port": port,
         "status": STATUS_FREE,
@@ -44,7 +43,7 @@ def register_new_container(ip: str, port: str) -> None:
         _write_containers_to_file(containers)
 
 
-def reserve_free_container() -> Optional[tuple[str, Container]]:
+def reserve_free_container() -> tuple[str, Container] | None:
     with file_lock:
         containers = _read_containers_from_file()
         for container_uuid, container in containers.items():

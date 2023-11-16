@@ -1,12 +1,11 @@
 import logging
 import os
 import threading
-import requests
 
+import requests
 from flask import Flask, jsonify, request
 
-
-from orchestrator.containers import reserve_free_container, free_container, Container
+from orchestrator.containers import Container, free_container, reserve_free_container
 
 INSTANCE_ID = os.environ.get("INSTANCE_ID", "unknown")
 
@@ -37,7 +36,8 @@ def new_request():
 
 
 def send_request_to_container(container_uuid: str, container: Container, incoming_request_data: bytes):
-    logger.info(f"Sending request to container {container_uuid} with data {incoming_request_data}")
+    logger.info(
+        f"Sending request to container {container_uuid} with data {incoming_request_data}")
     container_ip = container["ip"]
     container_port = container["port"]
     requests.request(
@@ -52,7 +52,8 @@ def process_request(incoming_request_data: bytes):
     reserved = reserve_free_container()
     if reserved:
         container_uuid, container = reserved
-        send_request_to_container(container_uuid, container, incoming_request_data)
+        send_request_to_container(
+            container_uuid, container, incoming_request_data)
         logger.info(f"Request processed by container {container_uuid}")
         free_container(container_uuid)
         logger.info(f"Container {container_uuid} freed")
