@@ -12,7 +12,7 @@ readme = "README.md"
 [[tool.poetry.source]]
 name = "torch"
 url = "https://download.pytorch.org/whl/cu118/"
-priority = "supplemental"
+priority = "explicit"
 
 [tool.poetry.dependencies]
 python = "~3.11"
