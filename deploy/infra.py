@@ -23,9 +23,8 @@ async def setup_infra():
     kp = _setup_key_pair()
     sg = _setup_security_group(vpc)
     instances_m4 = _launch_instances(sg, kp)
-    async with asyncio.TaskGroup() as tg:
-        for inst in instances_m4:
-            tg.create_task(asyncio.to_thread(wait_instance, inst))
+    tasks = (asyncio.to_thread(wait_instance, inst) for inst in instances_m4)
+    await asyncio.gather(*tasks)
     return instances_m4
 
 
@@ -83,6 +82,16 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
             ImageId=IMAGE_ID,
             MaxCount=1,
             MinCount=1,
+            BlockDeviceMappings=[
+                {
+                    'DeviceName': '/dev/sda1',
+                    'Ebs': {
+                        'DeleteOnTermination': True,
+                        'VolumeSize': 15,
+                        'VolumeType': 'gp2',
+                    }
+                }
+            ],
             Placement={'AvailabilityZone': zone},
             TagSpecifications=[{
                 'ResourceType': 'instance',

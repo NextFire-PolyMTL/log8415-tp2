@@ -21,16 +21,17 @@ async def main():
     #     ]
     # )
 
-    logger.info('Bootstrapping workers')
-    async with asyncio.TaskGroup() as tg:
-        for inst in instances_m4[:-1]:
-            tg.create_task(
-                asyncio.to_thread(bootstrap_instance, launch_worker, inst))
-
-        logger.info('Bootstrapping orchestrator')
-        logger.info(
-            f'ORCHESTRATOR public IP public ::: {instances_m4[-1].public_ip_address}')
-        bootstrap_instance(launch_orchestrator, instances_m4[-1])
+    logger.info('Bootstrapping workers and orchestrator')
+    tasks = []
+    for inst in instances_m4[:-1]:
+        tasks.append(asyncio.to_thread(
+            bootstrap_instance, launch_worker, inst))
+    last = instances_m4[-1]
+    logger.info(
+        f'ORCHESTRATOR public IP public ::: {last.public_ip_address}')
+    tasks.append(asyncio.to_thread(
+        bootstrap_instance, launch_orchestrator, last))
+    await asyncio.gather(*tasks)
 
     logger.info('Registering workers')
     for inst in instances_m4[:-1]:

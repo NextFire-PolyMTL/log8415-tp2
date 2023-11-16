@@ -68,9 +68,3 @@ def process_request(incoming_request_data: bytes):
         with request_queue_lock:
             request_queue.append(incoming_request_data)
             logger.info(f"Request queued. Queue length: {len(request_queue)}")
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level='INFO')
-    logger.info(f"Starting orchestrator {INSTANCE_ID} on port 8000")
-    app.run(port=8000)

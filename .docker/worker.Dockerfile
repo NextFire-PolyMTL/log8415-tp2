@@ -1,12 +1,18 @@
-FROM python:3.11-slim
+FROM pytorch/pytorch:latest
+
+ENV POETRY_VIRTUALENVS_IN_PROJECT=1
 
 WORKDIR /src
 
-RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --only worker
+RUN pip3 install poetry && \
+    poetry self add poetry-plugin-export && \
+    poetry export --only worker -o requirements.txt && \
+    pip3 install -r requirements.txt && \
+    rm -rf ~/.cache/
 
 COPY worker worker
 
-ENTRYPOINT [ "poetry", "run", "gunicorn", "-b", "0.0.0.0", "worker:app" ]
+ENTRYPOINT [ "python3" ]
+CMD [ "-m", "worker" ]
 EXPOSE 8000

@@ -89,5 +89,6 @@ def launch_orchestrator(instance: 'Instance', ssh_client: SSHClient):
         sudo docker rm -f orchestrator
         sudo docker run --name orchestrator -d -p 80:8000 \
             -e INSTANCE_ID={instance.id} \
+            --restart unless-stopped \
             orchestrator
         """)

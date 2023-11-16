@@ -1,6 +1,6 @@
 # log8415-tp2
 
-**Prerequisites:** [Python 3.11](https://www.python.org), [Poetry](https://python-poetry.org/) and [Docker](https://www.docker.com/). AWS credentials must be configured in `~/.aws/credentials`.
+**Prerequisites:** [Python 3.10 or 3.11](https://www.python.org), [Poetry](https://python-poetry.org/) and [Docker](https://www.docker.com/). AWS credentials must be configured in `~/.aws/credentials`.
 
 ## Deployment
 

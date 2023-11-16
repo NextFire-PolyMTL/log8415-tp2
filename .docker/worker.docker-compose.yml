@@ -8,6 +8,7 @@ services:
       - INSTANCE_ID=${INSTANCE_ID:-unknown}
     ports:
       - "8000:8000"
+    restart: unless-stopped
 
   worker-2:
     image: worker
@@ -18,3 +19,4 @@ services:
       - INSTANCE_ID=${INSTANCE_ID:-unknown}
     ports:
       - "8001:8000"
+    restart: unless-stopped
