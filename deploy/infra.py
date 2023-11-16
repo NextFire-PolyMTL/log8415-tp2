@@ -13,9 +13,11 @@ from deploy.config import (
 from deploy.utils import ec2_cli, ec2_res, get_default_vpc, wait_instance
 
 if TYPE_CHECKING:
-    from mypy_boto3_ec2.service_resource import KeyPair, SecurityGroup, Vpc
+    from mypy_boto3_ec2.service_resource import Instance, KeyPair, SecurityGroup, Vpc
 
 logger = logging.getLogger(__name__)
+
+NB_INSTANCES = M4_L_NB if not DEV else 2
 
 
 async def setup_infra():
@@ -59,6 +61,12 @@ def _setup_security_group(vpc: 'Vpc'):
                 "IpProtocol": "tcp",
                 "IpRanges": [{"CidrIp": "0.0.0.0/0"}],
             },
+            {
+                "FromPort": 8000,
+                "ToPort": 8001,
+                "IpProtocol": "tcp",
+                "IpRanges": [{"CidrIp": vpc.cidr_block}],
+            },
         ],
     )
     return sg
@@ -72,8 +80,8 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
                    in ec2_cli.describe_availability_zones()['AvailabilityZones']
                    if 'ZoneName' in zone]
 
-    instances_m4 = []
-    for i in range(M4_L_NB if not DEV else 2):
+    instances_m4: list[Instance] = []
+    for i in range(NB_INSTANCES):
         zone = avail_zones[i % len(avail_zones)]
         instances = ec2_res.create_instances(
             KeyName=kp.key_name,
@@ -96,8 +104,10 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
             TagSpecifications=[{
                 'ResourceType': 'instance',
                 'Tags': [
-                    {'Key': 'Name', 'Value': AWS_RES_NAME +
-                        getInstanceName(i)},
+                    {
+                        'Key': 'Name',
+                        'Value': AWS_RES_NAME + getInstanceName(i),
+                    },
                 ]
             }]
         )
@@ -106,7 +116,5 @@ def _launch_instances(sg: 'SecurityGroup', kp: 'KeyPair'):
     return instances_m4
 
 
-def getInstanceName(i):
-    if i == M4_L_NB - 1:
-        return "_orchestrator"
-    return "_worker_" + str(i+1)
+def getInstanceName(i: int):
+    return "_orchestrator" if (i == NB_INSTANCES - 1) else f"_worker_{i + 1}"

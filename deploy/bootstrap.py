@@ -8,6 +8,7 @@ from paramiko import AutoAddPolicy, RSAKey, SSHClient, ssh_exception
 
 from deploy.config import AWS_KEY_PAIR_NAME, SSH_USERNAME
 from deploy.utils import SSHExecError, ssh_exec
+from orchestrator.containers import CONTAINERS_FILENAME
 
 if TYPE_CHECKING:
     from mypy_boto3_ec2.service_resource import Instance
@@ -58,7 +59,9 @@ def launch_worker(instance: 'Instance', ssh_client: SSHClient):
             rm -rf src && mkdir -p src
             tar xzf src.tar.gz -C src/
             cd src/
-            sudo DOCKER_BUILDKIT=0 INSTANCE_ID={instance.id} docker compose -f .docker/worker.docker-compose.yml up --build -d
+            sudo DOCKER_BUILDKIT=0 INSTANCE_ID={instance.id} \
+                docker compose -f .docker/worker.docker-compose.yml \
+                up --build -d
             """)
 
 
@@ -72,6 +75,7 @@ def launch_orchestrator(instance: 'Instance', ssh_client: SSHClient):
                 tar.add('poetry.lock')
                 tar.add('orchestrator/')
                 tar.add('.docker/orchestrator.Dockerfile')
+                tar.add(CONTAINERS_FILENAME)
             f.seek(0)
             sftp.putfo(f, 'src.tar.gz')
     logger.info('Building orchestrator')

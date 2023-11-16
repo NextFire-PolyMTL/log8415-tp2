@@ -10,7 +10,9 @@ RUN pip3 install poetry && \
     rm -rf ~/.cache/
 
 COPY orchestrator orchestrator
+COPY containers.json .
 
 ENTRYPOINT [ "poetry", "run", "python3" ]
 CMD [ "-m", "orchestrator" ]
+
 EXPOSE 8000

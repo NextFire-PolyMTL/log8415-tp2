@@ -15,4 +15,5 @@ COPY worker worker
 
 ENTRYPOINT [ "python3" ]
 CMD [ "-m", "worker" ]
+
 EXPOSE 8000
