@@ -6,7 +6,7 @@ RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --only worker
 
-COPY worker app
+COPY worker worker
 
-ENTRYPOINT [ "poetry", "run", "gunicorn", "-b", "0.0.0.0", "app:app" ]
+ENTRYPOINT [ "poetry", "run", "gunicorn", "-b", "0.0.0.0", "worker:app" ]
 EXPOSE 8000
