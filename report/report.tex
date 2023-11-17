@@ -4,9 +4,13 @@
 \usepackage[hmargin=1.25in,vmargin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
 % \usepackage[backend=bibtex]{biblatex}
 
 % \addbibresource{references.bib}
+
+\newcommand{\todo}{{\color{red}{TODO}}}
 
 \titlehead{
     \centering
@@ -25,6 +29,10 @@
 \date{\today}
 \publishers{Polytechnique Montréal – Fall 2023}
 
+\lstdefinestyle{lststyle}{
+    basicstyle=\ttfamily
+}
+\lstset{style=lststyle}
 
 \begin{document}
 
@@ -35,11 +43,94 @@
 \clearpage
 \pagenumbering{arabic}
 
-\addsec{Introduction}
+\section*{Handover Documentation Report}
 
-\section{Section}
+\subsection*{Project Title}
 
-\addsec{Conclusion}
+Cluster Benchmarking using EC2 Virtual Machines and Elastic Load Balancer (ELB)
+
+\subsection*{Report Date}
+
+\today
+
+\subsection*{Team Members}
+
+\begin{itemize}
+    \item Quentin Guidée (2206809)
+    \item Aurel Lucrich Ikama Honey (2160742)
+    \item Nam Vu (2230468)
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.3pt}
+
+\section*{Executive Summary}
+
+\noindent\rule{\textwidth}{0.3pt}
+
+\section{Introduction}
+
+\todo
+
+\section{Project objectives}
+
+\todo
+
+\section{Approach}
+
+\todo
+
+\section{Tasks and Responsoibilities}
+
+\todo
+
+\section{Progress and achievements}
+
+\todo
+
+\section{Results and Outcomes}
+
+\todo
+
+\section{Lessons learned}
+
+\todo
+
+\section{Recommendations}
+
+\todo
+
+\section{Conclusion}
+
+\todo
+
+\addsec{Attachments}
+
+\subsection*{Git repository}
+
+GitHub: \url{https://github.com/NextFire-PolyMTL/log8415-tp1}
+
+List of authors:
+
+\begin{itemize}
+    \item Quentin Guidée:
+\begin{lstlisting}
+Quentin Guidée <quentin.guidee@gmail.com>
+Quentin Guidée <contact@quentinguidee.dev>
+\end{lstlisting}
+    \item Aurel Lucrich Ikama Honey:
+\begin{lstlisting}
+aurpur <ikamaaurel@gmail.com>
+aurpur <122250820+aurelikama@users.noreply.github.com>
+\end{lstlisting}
+    \item Nam Vu:
+\begin{lstlisting}
+Nam Vu <git@yuru.moe>
+\end{lstlisting}
+\end{itemize}
+
+\addsec{Signatures}
+
+Quentin G., Aurel L.I.H., Nam V.
 
 % \printbibliography
 
