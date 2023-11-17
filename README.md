@@ -14,3 +14,8 @@ To terminate all resources:
 ```sh
 poetry run python3 -m deploy.cleanup
 ```
+## Testing
+
+```sh
+poetry run python3 -m tests
+```

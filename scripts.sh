@@ -13,3 +13,6 @@ poetry run python3 -m deploy
 
 # Cleanup all AWS resources at the end
 poetry run python3 -m deploy.cleanup
+
+# Run the tests
+poetry run python3 -m tests

@@ -7,9 +7,9 @@ from deploy.bootstrap import bootstrap_instance, launch_orchestrator, launch_wor
 from deploy.config import LOG_LEVEL
 from deploy.infra import setup_infra
 from orchestrator.containers import CONTAINERS_FILENAME, register_new_container
+from orchestrator.utils import save_orchestrator_ip
 
 logger = logging.getLogger(__name__)
-
 
 async def main():
     logger.info("Setting up infrastructure")
@@ -36,7 +36,9 @@ async def main():
 
     last = instances_m4[-1]
     bootstrap_instance(launch_orchestrator, last)
+    save_orchestrator_ip(last.public_ip_address)
     logger.info(f"ORCHESTRATOR public IP public ::: {last.public_ip_address}")
+
 
 
 if __name__ == "__main__":

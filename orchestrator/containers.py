@@ -59,3 +59,4 @@ def free_container(container_uuid: str) -> None:
         containers = _read_containers_from_file()
         containers[container_uuid]["status"] = STATUS_FREE
         _write_containers_to_file(containers)
+
