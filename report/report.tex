@@ -69,19 +69,49 @@ Cluster Benchmarking using EC2 Virtual Machines and Elastic Load Balancer (ELB)
 
 \section{Introduction}
 
-\todo
+The goal of this second project is to continue experimenting with AWS.
+This time, the load balancer will be abstracted by writing a custom orchestrator.
+This orchestrator will be responsible for dispatching requests to multiple workers.
+Finally, the workers will be used to run inference on machine learning models.
 
 \section{Project objectives}
 
-\todo
+Different objectives are fixed for this project:
+\begin{itemize}
+    \item Create and deploy a custom orchestrator on Amazon EC2.
+    \item Deploy multiple workers, running by pairs on Amazon EC2.
+\end{itemize}
 
 \section{Approach}
 
-\todo
+First of all, the code from the previous project has been reused, except for the load balancer and the flask app.
+This allowed us to quickly have a working solution.
+
+Then, the load balancer has been replaced by a custom orchestrator. This consists of a simple flask app, which dispatches requests to the workers and manages instances state.
+
+Finally, the workers have been deployed. Each EC2 instance runs two workers, which are both listening on different ports.
+
+Like the previous project, all the code is versioned in a Git monorepo. The Python project is managed using the Poetry dependency manager: this makes it easier to manage dependencies across the different subprojects and automate the venv setup.
 
 \section{Tasks and Responsoibilities}
 
-\todo
+\subsection*{Nam Vu}
+
+\begin{itemize}
+    \item Adapt the code from the previous project to the new requirements.
+\end{itemize}
+
+\subsection*{Quentin Guidée}
+
+\begin{itemize}
+    \item Create the orchestrator.
+\end{itemize}
+
+\subsection*{Aurel Lucrich Ikama Honey}
+
+\begin{itemize}
+    \item Create the workers.
+\end{itemize}
 
 \section{Progress and achievements}
 
