@@ -1,2 +1,9 @@
 *.synctex.gz
-report.pdf
+*.pdf
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.xdv

@@ -12,6 +12,7 @@ packages = [
     {include = "deploy"},
     {include = "orchestrator"},
     {include = "worker"},
+    {include = "bench"},
 ]
 
 [tool.poetry.dependencies]
@@ -33,6 +34,9 @@ requests = "^2.31.0"
 [tool.poetry.group.worker.dependencies]
 flask = "^2.3.3"
 transformers = "^4.35.2"
+
+[tool.poetry.group.bench.dependencies]
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 boto3-stubs = {extras = ["essential"], version = "^1.28.50"}

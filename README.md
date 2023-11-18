@@ -5,17 +5,13 @@
 ## Deployment
 
 ```sh
-poetry install --only deploy
+poetry install --with deploy,bench
 poetry run python3 -m deploy
+poetry run python3 -m bench
 ```
 
 To terminate all resources:
 
 ```sh
 poetry run python3 -m deploy.cleanup
-```
-## Testing
-
-```sh
-poetry run python3 -m tests
 ```
