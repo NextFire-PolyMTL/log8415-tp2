@@ -129,7 +129,7 @@ DistilBERT. This is a reduced but faster version of the BERT model that enables
 bidirectional text prediction from a given unlabeled text. EC2 instances are
 deployed in a security group that allows SSH and HTTP connections from the
 outside. The instances are called workers and there are 4 of them. In short, we
-have 4 workers, each containing two docker containers (with a machine learning application) \ref{fig:infra}.
+have 4 workers, each containing two docker containers (with a machine learning application). See Figure \ref{fig:infra}.
 
 We then created an orchestrator to dispatch requests to all workers. This orchestrator is a flask application that manages the state of EC2 instances and dispatches requests to all workers.
 
@@ -149,7 +149,10 @@ Finally, to test our infrastructure, we used a test script in the bench module, 
 
 \section{Lessons learned}
 
-\todo
+\begin{itemize}
+    \item The code from project 1 was very modular, which made it easy to adapt it to the new requirements. So good code design is important to support future changes.
+    \item While the orchestrator of this project is very simple compared to real world solutions, this project demonstrates that for some use cases, a custom orchestrator can be a good and lightweight solution.
+\end{itemize}
 
 \section{Recommendations}
 
