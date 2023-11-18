@@ -6,6 +6,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+
 % \usepackage[backend=bibtex]{biblatex}
 
 % \addbibresource{references.bib}
@@ -123,7 +124,15 @@ As in the previous project, we've created a bootstrap script to build our infras
 
 This Flask application as indicated in the subject calls a function that is responsible for performing inference on an ML model.
 
-In this project we used the machine learning Transformer model called DistilBERT. This is a reduced but faster version of the BERT model that enables bidirectional text prediction from a given unlabeled text. EC2 instances are deployed in a security group that allows SSH and HTTP connections from the outside. The instances are called workers and there are 4 of them. In short, we have 4 workers, each containing two docker containers (with a machine learning application).
+
+
+In this project we used the machine learning Transformer model called
+DistilBERT. This is a reduced but faster version of the BERT model that enables
+bidirectional text prediction from a given unlabeled text. EC2 instances are
+deployed in a security group that allows SSH and HTTP connections from the
+outside. The instances are called workers and there are 4 of them. In short, we
+have 4 workers, each containing two docker containers (with a machine learning
+application)~\cite{fig:infra}.
 
 We then created an orchestrator to dispatch requests to all workers. This orchestrator is a flask application that manages the state of EC2 instances and dispatches requests to all workers.
 
@@ -135,6 +144,7 @@ Finally, to test our infrastructure, we used a test script in the bench module, 
     \caption{Infrastructure diagram}
     \label{fig:infra}
 \end{figure}
+
 
 \section{Results and Outcomes}
 
