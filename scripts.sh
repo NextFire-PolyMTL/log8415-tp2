@@ -12,7 +12,7 @@ poetry install --with deploy,bench
 poetry run python3 -m deploy
 
 # Run the bench
-poetry run python3 -m bench
+poetry run python3 -m bench 5 4     # 5 parallel requests, 4 times
 
 # Cleanup all AWS resources at the end
 poetry run python3 -m deploy.cleanup
