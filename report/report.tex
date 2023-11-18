@@ -129,6 +129,12 @@ We then created an orchestrator to dispatch requests to all workers. This orches
 
 Finally, to test our infrastructure, we used a test script in the bench module, which executes a given number (here 5) of requests in parallel on the orchestrator. We used the python library \emp{multiprocessing} to create a pool of processes to execute the requests in parallel.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{report/images/infra.pdf}
+    \caption{Infrastructure diagram}
+    \label{fig:infra}
+\end{figure}
 
 \section{Results and Outcomes}
 
