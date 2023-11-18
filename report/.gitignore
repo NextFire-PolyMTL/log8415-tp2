@@ -1,6 +1,5 @@
 
 *.synctex.gz
-*.pdf
 *.aux
 *.fdb_latexmk
 *.fls
