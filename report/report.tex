@@ -106,6 +106,7 @@ Like the previous project, all the code is versioned in a Git monorepo. The Pyth
 
 \begin{itemize}
     \item Adapt the code from the previous project to the new requirements.
+    \item Docker manifests.
 \end{itemize}
 
 \subsection*{Quentin Guidée}
@@ -118,13 +119,14 @@ Like the previous project, all the code is versioned in a Git monorepo. The Pyth
 
 \begin{itemize}
     \item Create the workers.
+    \item Benchmarking script.
 \end{itemize}
 
 \section{Progress and achievements}
 
 Initially, we took over some of the code from the previous project. We reused the deployment code for the EC2 instances and the Flask application.
 
-As in the previous project, we've created a bootstrap script to build our infrastructure. This script is used to create the EC2 instances in which we've deployed two Docker containers. In each of these containers, we have deployed a flask application.
+As in the previous project, we've created a bootstrap script to build our infrastructure. This script is used to create the EC2 instances in which we've deployed two Docker containers with Docker Compose. In each of these containers, we have deployed a Flask application.
 
 This Flask application as indicated in the subject calls a function that is responsible for performing inference on an ML model.
 
@@ -148,7 +150,7 @@ Each worker is setup using a docker-compose file which creates two containers in
 
 \subsection{Orchestrator}
 
-We then created an orchestrator to dispatch requests to all workers. This orchestrator is a flask application that manages the state of EC2 instances and dispatches requests to all workers.
+We then created an orchestrator to dispatch requests to all workers. This orchestrator is a Flask application that manages the state of EC2 instances and dispatches requests to all workers.
 
 When a request is received, the orchestrator first tries to find a worker that is not busy. If all workers are busy, the request is added to a queue. When a worker becomes available, the first request in the queue is dispatched to this worker.
 
@@ -198,11 +200,16 @@ Finally, when running our test script, we can see that the requests are being di
 \begin{itemize}
     \item The code from project 1 was very modular, which made it easy to adapt it to the new requirements. So good code design is important to support future changes.
     \item While the orchestrator of this project is very simple compared to real world solutions, this project demonstrates that for some use cases, a custom orchestrator can be a good and lightweight solution.
+    \item Workers allows us to scale our application horizontally. This is a good way to handle a large number of requests which require a lot of computation but can be processed independently.
+    \item Containers make it easier to deploy applications requiring a lot of dependencies (such as ML ones). This is a good way to ensure that the application will run on any machine and will not be affected by the host environment.
 \end{itemize}
 
 \section{Recommendations}
 
-\todo
+\begin{itemize}
+    \item The orchestrator could also be scaled horizontally to handle more requests and reduce the risk of Single Point of Failure.
+    \item The Docker images could be build once and pushed to a registry, instead of being built on each worker. This would reduce the deployment time of new workers. A CI/CD pipeline could be used to automate this process.
+\end{itemize}
 
 \section{Conclusion}
 
