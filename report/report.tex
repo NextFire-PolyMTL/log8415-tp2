@@ -6,6 +6,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{float}
 
 % \usepackage[backend=bibtex]{biblatex}
 
@@ -131,21 +132,59 @@ deployed in a security group that allows SSH and HTTP connections from the
 outside. The instances are called workers and there are 4 of them. In short, we
 have 4 workers, each containing two docker containers (with a machine learning application). See Figure \ref{fig:infra}.
 
+\subsection{Orchestrator}
+
 We then created an orchestrator to dispatch requests to all workers. This orchestrator is a flask application that manages the state of EC2 instances and dispatches requests to all workers.
+
+When a request is received, the orchestrator first tries to find a worker that is not busy. If all workers are busy, the request is added to a queue. When a worker becomes available, the first request in the queue is dispatched to this worker.
+
+Note that a mutex is used to ensure that requests are handled in a thread-safe manner.
+
+\subsection{Tests}
 
 Finally, to test our infrastructure, we used a test script in the bench module, which executes a given number (here 5) of requests in parallel on the orchestrator. We used the python library \emph{multiprocessing} to create a pool of processes to execute the requests in parallel.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/infra.pdf}
     \caption{Infrastructure diagram}
     \label{fig:infra}
 \end{figure}
 
-
 \section{Results and Outcomes}
 
-\todo
+\subsection{Workers}
+
+First, for the workers, we can see in the logs below that the docker-compose file is working as expected, creating two containers. Two sample requests are also been sent manually to the workers to test them.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/worker.png}
+    \caption{Worker logs}
+    \label{fig:worker}
+\end{figure}
+
+\subsection{Orchestrator}
+
+Then, for the orchestrator, we can see in the logs below that the requests are being dispatched to the workers as expected. The orchestrator is also able to handle the case where all workers are busy. This case can be seen in the logs with the mention of a "Queue length".
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/orchestrator.png}
+    \caption{Orchestrator logs}
+    \label{fig:orchestrator}
+\end{figure}
+
+\subsection{Tests}
+
+Finally, when running our test script, we can see that the requests are being dispatched and received by the workers as expected.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/test.png}
+    \caption{Test script logs}
+    \label{fig:test}
+\end{figure}
 
 \section{Lessons learned}
 
